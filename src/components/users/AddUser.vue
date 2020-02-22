@@ -553,7 +553,7 @@ export default {
               addUserProfile(
                 {...userObj,
                 "uid":userCreateResult.uid,
-                role:""}
+                }
               ).then(profileResult =>{
                 console.log(profileResult.data.status)
                 this.$swal.fire({

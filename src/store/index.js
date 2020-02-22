@@ -14,6 +14,7 @@ function removeInitialC(str) {
 
 export default new Vuex.Store({
   state: {
+    userType:"",
     brochureCount: 150,
     businessCardsCount: 100,
     categoriesCount: 40,
@@ -69,29 +70,6 @@ export default new Vuex.Store({
       "Actions"
     ],
 
-    // tags: this.tagsSelected,
-    // image: this.image,
-    // salutation: this.salutation,
-    // firstname: this.firstname,
-    // lastname: this.lastname,
-    // personal_email: this.personal_email,
-    // personal_phone: this.personal_phone,
-    // type: this.type,
-    // organization: this.organization,
-    // tier: this.tier,
-    // designation: this.designation,
-    // office_email: this.office_email,
-    // office_address: this.office_address,
-    // city: this.city,
-    // pincode: this.pincode,
-    // state: this.state,
-    // country: this.country,
-    // region: this.region,
-    // addedBy: firebase.auth().currentUser.uid,
-    // addedOn: new Date(),
-    // converted: "pending",
-    // status: "active"
-
     allColumns: [
       
       
@@ -146,6 +124,9 @@ export default new Vuex.Store({
     ]
   },
   mutations: {
+    setUserType:(state,payload) => {
+      state.userType = payload;
+    },
     filterCards: (state, payload) => {
       let selectedStates = payload.selectedStates;
       let selectedRegions = payload.selectedRegions;

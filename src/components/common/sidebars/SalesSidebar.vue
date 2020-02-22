@@ -1,26 +1,47 @@
 <template>
-  <div class="left side-menu">
-      <admin-sidebar v-if="usertype=='Admin'"/>
-      <sales-sidebar v-if="usertype=='Sales'" />
-      <data-entry-sidebar v-if="usertype=='Data Entry'"/>
-  </div>
+  
+    <div class="slimscroll-menu" id="remove-scroll">
+      
+      <div id="sidebar-menu">
+        
+        <ul class="metismenu" id="side-menu">
+          <li class="menu-title">Main</li>
+          
+
+          <li>
+            <a href="javascript:void(0);" class="waves-effect"
+            @click.prevent="() => setContentLayout('cards')"
+              ><i class="mdi mdi-email"></i
+              ><span>
+                Cards
+                </span
+            ></a>
+          </li>
+
+          <li>
+            <a href="javascript:void(0);" class="waves-effect"
+            @click.prevent="() => setContentLayout('lists')"
+              ><i class="mdi mdi-buffer"></i>
+              <span>
+                Lists
+               </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  
 </template>
 
 <script>
 import store from "@/store/index.js";
 import Papa from 'papaparse';
 import firebase from "firebase";
-import SalesSidebar from "./sidebars/SalesSidebar.vue";
-import DataEntrySidebar from "./sidebars/DataEntrySidebar.vue";
-import AdminSidebar from "./sidebars/AdminSidebar.vue";
-
 export default {
-  name: "SideBar",
-  components:{
-    SalesSidebar,
-    DataEntrySidebar,
-    AdminSidebar
-  },
+  name: "SalesSideBar",
   methods: {
     setContentLayout: page => {
       store.commit("setActivePage", page);
@@ -94,11 +115,6 @@ export default {
       };
     }
 
-  },
-  computed:{
-    usertype(){
-      return store.state.userType
-    }
   }
 };
 </script>

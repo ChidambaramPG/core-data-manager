@@ -54,6 +54,7 @@
 <script>
 import firebase from "firebase";
 import router from "../router/index.js";
+import store from "../store/index.js";
 export default {
     name: "Login",
     data(){
@@ -78,7 +79,20 @@ export default {
 				.then(() => {
 					// console.log(resp)
 					this.loading = false;
-					router.push("/dashboard");
+					firebase.firestore().collection("Users").where("email","==",this.username).get().then((resp)=> {
+						resp.forEach(user => {
+							console.log(user.data())
+							store.commit("setUserType",user.data()['role'])
+							if(user.data()['role'] == 'Admin'){
+								router.push("/dashboard");
+							}else if(user.data()['role'] == 'Data entry'){
+								router.push('dataentry-dashboard')
+							}else if(user.data()['role'] == 'Sales'){
+								router.push('sales-dashboard')
+							}
+						});
+					})
+					
 				})
 				.catch( error => {
 					this.loading = false;

@@ -1,8 +1,61 @@
 <template>
   <div class="left side-menu">
-      <admin-sidebar v-if="usertype=='Admin'"/>
-      <sales-sidebar v-if="usertype=='Sales'" />
-      <data-entry-sidebar v-if="usertype=='Data Entry'"/>
+    <div class="slimscroll-menu" id="remove-scroll">
+      
+      <div id="sidebar-menu">
+        
+        <ul class="metismenu" id="side-menu">
+          <li class="menu-title">Main</li>
+          
+
+          <li>
+            <a href="javascript:void(0);" class="waves-effect"
+            @click.prevent="() => setContentLayout('cards')"
+              ><i class="mdi mdi-email"></i
+              ><span>
+                Cards
+                </span
+            ></a>
+          </li>
+
+          <li>
+            <a href="javascript:void(0);" class="waves-effect"
+            @click.prevent="() => setContentLayout('lists')"
+              ><i class="mdi mdi-buffer"></i>
+              <span>
+                Lists
+               </span>
+            </a>
+          </li>
+
+         <li>
+            <a href="javascript:void(0);" class="waves-effect"
+            @click.prevent="() => setContentLayout('users')"
+              ><i class="mdi mdi-account"></i>
+              <span>
+                Users
+               </span>
+            </a>
+          </li>
+
+          <li>
+            <input type="file" id="select-csv" style="display:none" @change="event => uploadCSV()">
+            <a
+              href="index.html"
+              class="waves-effect"
+              @click.prevent="() => importExcel()"
+            >
+              <i class="mdi mdi-upload"></i
+              >
+              <span>CSV</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="clearfix"></div>
+    </div>
+    
   </div>
 </template>
 
@@ -10,17 +63,8 @@
 import store from "@/store/index.js";
 import Papa from 'papaparse';
 import firebase from "firebase";
-import SalesSidebar from "./sidebars/SalesSidebar.vue";
-import DataEntrySidebar from "./sidebars/DataEntrySidebar.vue";
-import AdminSidebar from "./sidebars/AdminSidebar.vue";
-
 export default {
-  name: "SideBar",
-  components:{
-    SalesSidebar,
-    DataEntrySidebar,
-    AdminSidebar
-  },
+  name: "AdminSideBar",
   methods: {
     setContentLayout: page => {
       store.commit("setActivePage", page);
@@ -34,13 +78,11 @@ export default {
       // // console.log(event)
       let fileInput = document.getElementById('select-csv')
       let singleFile = fileInput.files[0]
-
       const filereader = new FileReader();
       filereader.readAsText(singleFile);
       filereader.onload = function() {
           let cards = Papa.parse(filereader.result).data
           cards.forEach(card => {
-
             if(card[0] != ''){
               let name = card[0].split(' ')
               let firstname = '';
@@ -68,9 +110,7 @@ export default {
                 category:card[9],
                 region:card[10]
               };
-
               // console.log(cardObj)
-
               firebase
               .firestore()
               .collection("Cards")
@@ -82,22 +122,14 @@ export default {
                 // // console.log(err)
               });
             }
-
             
           })
          
-
       };
       // Print the error incase there is one
       filereader.onerror = function() {
           alert("Error: ", filereader.error);
       };
-    }
-
-  },
-  computed:{
-    usertype(){
-      return store.state.userType
     }
   }
 };
